@@ -1,0 +1,80 @@
+body {
+  overflow-y: hidden;
+}
+
+.body {
+  display: flex;
+  justify-content: center;
+  background: linear-gradient(hsl(315, 15%, 95%), #eaf3f7);
+  height: 100vw;
+}
+
+@font-face {
+  font-family: muliFont;
+  src: url("./fonts/Muli-ExtraLight.ttf") format("truetype");
+  font-weight: 400;
+  font-size: 12px;
+}
+
+@font-face {
+  font-family: muliFontBold;
+  src: url("./fonts/Muli-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.event_list {
+  overflow-x: hidden;
+  width: 700px;
+  margin: 20px 0px;
+  height: 95vh;
+  padding: 0px;
+  box-shadow: 0px 0px 3px 2px rgba(62, 118, 244, 0.14);
+  overflow-y: scroll;
+}
+
+.list_item {
+  width: inherit;
+  height: 90px;
+  padding: 26px 29px;
+  background: white;
+  border-radius: 6px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  margin: 0px 0px 2px 0px;
+  box-sizing: border-box;
+}
+
+.list_item:hover {
+  background: rgb(111, 111, 124);
+}
+
+.avatar {
+  width: 37px;
+  height: 37px;
+  border-radius: 50%;
+  background-color: #cadcdc;
+  align-self: center;
+}
+
+.text_container {
+  font-family: "muliFont";
+  width: 80%;
+  padding: 0px 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: inherit;
+}
+
+.block_info {
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0;
+}
+
+.date {
+  margin: 0;
+}
