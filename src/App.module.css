@@ -13,7 +13,7 @@ body {
   font-family: muliFont;
   src: url("./fonts/Muli-ExtraLight.ttf") format("truetype");
   font-weight: 400;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 @font-face {
@@ -47,7 +47,7 @@ body {
 }
 
 .list_item:hover {
-  background: rgb(111, 111, 124);
+  background: rgb(174 174 187 / 41%);
 }
 
 .avatar {
@@ -56,6 +56,11 @@ body {
   border-radius: 50%;
   background-color: #cadcdc;
   align-self: center;
+}
+
+.avatar canvas {
+  height: inherit;
+  width: inherit;
 }
 
 .text_container {
@@ -73,6 +78,11 @@ body {
   white-space: nowrap;
   overflow: hidden;
   margin: 0;
+}
+
+.block_info:hover {
+  overflow: visible;
+  white-space: normal;
 }
 
 .date {
