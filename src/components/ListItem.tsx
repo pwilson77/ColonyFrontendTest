@@ -19,10 +19,8 @@ const dateConversion = (val: number): string => {
 const myBlockies = (address: string) => (
   <Blockies
     seed={address}
-    size={12}
+    size={12.33}
     scale={3}
-    color="#dfe"
-    bgColor="#ffe"
     spotColor="#abc"
     className={styles.avatar}
   />

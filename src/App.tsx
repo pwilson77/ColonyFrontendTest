@@ -81,6 +81,16 @@ export default class App extends React.Component<{}, MyState> {
         colonyClient.interface.parseLog(event)
       );
 
+      let eventsLogs: Array = [
+        ...initEventLogs,
+        ...colonyRoleEventLogs,
+        ...domainAddedEventLogs,
+      ];
+
+      let parsedLogs = eventsLogs.map((event) =>
+        colonyClient.interface.parseLog(event)
+      );
+
       // Getting the userAddress for PayoutClaimed Events
 
       let parsedPayoutArray: Array = [];
@@ -111,16 +121,7 @@ export default class App extends React.Component<{}, MyState> {
         parsedPayoutArray.push(logObject);
       }
 
-      let eventsLogs = [
-        ...initEventLogs,
-        ...colonyRoleEventLogs,
-        ...domainAddedEventLogs,
-      ];
-
-      let parsedLogs = eventsLogs.map((event) =>
-        colonyClient.interface.parseLog(event)
-      );
-
+      // Add the Date key to Logs
       eventsLogs = [...eventsLogs, ...payoutEventLogs];
       parsedLogs = [...parsedLogs, ...parsedPayoutArray];
 
@@ -147,9 +148,10 @@ export default class App extends React.Component<{}, MyState> {
           eventsArray.push(objectToMap);
         }
       }
-      console.group();
+
       console.log("finished Fetching");
-      console.groupEnd();
+
+      //sort data according to Dates
       eventsArray.sort(this.compareDates);
 
       return {
