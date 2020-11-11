@@ -87,4 +87,16 @@ body {
 
 .date {
   margin: 0;
+  font-size: 12px;
+}
+
+.center {
+  display: flex;
+  width: inherit;
+  height: inherit;
+  justify-content: center;
+}
+
+.center svg {
+  align-self: center;
 }

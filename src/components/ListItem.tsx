@@ -11,7 +11,7 @@ interface Props {
 
 const dateConversion = (val: number): string => {
   let date: Date = new Date(val);
-  return `${date.getDay()}, ${date.toLocaleString("default", {
+  return `${date.getDate()}, ${date.toLocaleString("default", {
     month: "short",
   })} `;
 };
@@ -40,6 +40,20 @@ const getDomainId = (hexval: string): string => {
   return humanReadableAmount.toString();
 };
 
+const getToken = (log: object): string => {
+  const tokens: object = {
+    "0x6B175474E89094C44Da98b954EedeAC495271d0F": "DAI",
+    "0x0dd7b8f3d1fa88FAbAa8a04A0c7B52FC35D4312c": "BLNY",
+  };
+
+  if (log.values.token in tokens) {
+    return tokens[log.values.token];
+  } else {
+    console.log(log.values.token);
+    return "";
+  }
+};
+
 const PaymentConfirmationListItem: React.FunctionComponent<{
   data: object;
 }> = ({ data }) => (
@@ -49,7 +63,7 @@ const PaymentConfirmationListItem: React.FunctionComponent<{
     <div className={styles.text_container}>
       <p className={styles.block_info}>
         User <b>{`${data.userAddress}`}</b> claimed
-        <b>{` ${getValue(data.values.amount._hex)} ${"token"} `}</b>
+        <b>{` ${getValue(data.values.amount._hex)} ${getToken(data)} `}</b>
         payout from pot <b>{` ${data.humanReadableFundingPotId} `}</b>
       </p>
       <p className={styles.date}>{dateConversion(data.date)}</p>

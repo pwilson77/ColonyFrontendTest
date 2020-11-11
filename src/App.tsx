@@ -8,10 +8,12 @@ import {
   getLogs,
 } from "@colony/colony-js";
 import { Wallet } from "ethers";
-import { InfuraProvider } from "ethers/providers";
+import { InfuraProvider, Web3Provider } from "ethers/providers";
 import { utils } from "ethers";
 import { ListItem } from "./components/ListItem";
-import { loadavg } from "os";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
+import detectEthereumProvider from "@metamask/detect-provider";
 
 interface MyState {
   readonly eventsArray: object;
@@ -32,14 +34,16 @@ export default class App extends React.Component<{}, MyState> {
     this.getData();
   }
 
-  componentDidUpdate() {}
-
   getData = (): void => {
     (async (): Promise<object> => {
       const MAINNET_NETWORK_ADDRESS = `0x5346D0f80e2816FaD329F2c140c870ffc3c3E2Ef`;
       const MAINNET_BETACOLONY_ADDRESS = `0x869814034d96544f3C62DE2aC22448ed79Ac8e70`;
 
-      const provider = new InfuraProvider();
+      //const provider = new InfuraProvider();
+      // using MetaMask's provider due to issues with Infura
+
+      const MetaMaskprovider = await detectEthereumProvider();
+      const provider = new Web3Provider(MetaMaskprovider);
 
       const wallet = Wallet.createRandom();
       const connectedWallet = wallet.connect(provider);
@@ -77,16 +81,17 @@ export default class App extends React.Component<{}, MyState> {
         colonyClient.interface.parseLog(event)
       );
 
+      // Getting the userAddress for PayoutClaimed Events
+
       let parsedPayoutArray: Array = [];
 
-      //This is to bypass the Infura rate limit of 10 requests per second
-
+      //This is to slow down requests in order to not hit Infura's Rate Limit
       const timeout = (ms) => {
         return new Promise((resolve) => setTimeout(resolve, ms));
       };
 
       for (let log of parsedPayoutLogs) {
-        await timeout(700);
+        //await timeout(700);
         let logObject: object = { ...log };
         const humanReadableFundingPotId = new utils.BigNumber(
           log.values.fundingPotId
@@ -130,7 +135,7 @@ export default class App extends React.Component<{}, MyState> {
         };
 
         if (i % 10 === 0) {
-          await timeout(3000);
+          //await timeout(500);
           let dateInMilliseconds = await getDate(eventsLogs[i]);
           objectToMap = { ...eventsLogs[i], ...parsedLogs[i] };
           objectToMap["date"] = dateInMilliseconds;
@@ -144,8 +149,6 @@ export default class App extends React.Component<{}, MyState> {
       }
       console.group();
       console.log("finished Fetching");
-      // console.log(eventsLogs);
-      // console.log(parsedLogs);
       console.groupEnd();
       eventsArray.sort(this.compareDates);
 
@@ -179,9 +182,12 @@ export default class App extends React.Component<{}, MyState> {
   };
 
   compareDates = (log2: object, log3: object): boolean => {
-    if ((log2.date as number) > (log3.date as number)) {
+    let firstDate: object = new Date(log2.date);
+    let secondDate: object = new Date(log3.date);
+
+    if (firstDate.getTime() > secondDate.getTime()) {
       return -1;
-    } else if ((log2.date as number) < (log3.date as number)) {
+    } else if (firstDate.getTime() < secondDate.getTime()) {
       return 1;
     } else {
       return 0;
@@ -194,7 +200,17 @@ export default class App extends React.Component<{}, MyState> {
       <div className="App">
         <div className={styles.body}>
           <ul className={styles.event_list}>
-            {loading ? null : <ListItem sortedData={eventsArray} />}
+            {loading ? (
+              <Loader
+                type="Bars"
+                color="#00BFFF"
+                height={100}
+                width={100}
+                className={styles.center}
+              />
+            ) : (
+              <ListItem sortedData={eventsArray} />
+            )}
           </ul>
         </div>
       </div>
